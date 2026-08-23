@@ -50,8 +50,8 @@ FULL = (177, 273, 1098, 985)     # монограмма + подпись
 
 cut(MARK, INK,   target_h=200).save(f'{OUT}/logo-mark.png', optimize=True)
 cut(MARK, LIGHT, target_h=200).save(f'{OUT}/logo-mark-light.png', optimize=True)
-cut(FULL, INK,   target_w=560).save(f'{OUT}/logo-full.png', optimize=True)
-cut(FULL, LIGHT, target_w=560).save(f'{OUT}/logo-full-light.png', optimize=True)
+cut(FULL, INK,   target_w=380).save(f'{OUT}/logo-full.png', optimize=True)
+cut(FULL, LIGHT, target_w=380).save(f'{OUT}/logo-full-light.png', optimize=True)
 
 # --- иконки ---
 for size, name in ((32, 'favicon-32.png'), (180, 'apple-touch-icon.png')):
