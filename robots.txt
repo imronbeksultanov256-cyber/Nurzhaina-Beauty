@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://imronbeksultanov256-cyber.github.io/Nurzhaina-Beauty/sitemap.xml
