@@ -7,6 +7,34 @@
 
 ---
 
+## Опубликованный сайт
+
+**https://imronbeksultanov256-cyber.github.io/Nurzhaina-Beauty/**
+
+Репозиторий: https://github.com/imronbeksultanov256-cyber/Nurzhaina-Beauty
+GitHub Pages настроены на деплой из ветки `main`, папка `/`.
+
+Чтобы обновить сайт, достаточно запушить изменения:
+
+```bash
+git add -A && git commit -m "что изменилось" && git push
+```
+
+Сборка занимает около минуты, затем правки видны по ссылке выше.
+
+### Свой домен
+
+Когда появится домен (например `nurzhanabeauty.kg`):
+
+1. в настройках репозитория Settings → Pages → Custom domain укажите домен;
+2. у регистратора добавьте записи `A` на адреса GitHub Pages
+   (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153),
+   либо `CNAME` на `imronbeksultanov256-cyber.github.io` для поддомена `www`;
+3. включите Enforce HTTPS;
+4. замените адрес в `sitemap.xml` и `robots.txt` на новый домен.
+
+---
+
 ## Запуск локально
 
 ```bash
