@@ -53,6 +53,7 @@
       <a href="about.html">О клинике</a>
       <a href="procedures.html">Процедуры</a>
       <a href="results.html">Результаты</a>
+      <a href="reviews.html">Отзывы</a>
       <a href="video.html">Видео</a>
       <a href="price.html">Прайс</a>
       <a href="contacts.html">Контакты</a>
@@ -72,6 +73,7 @@
     <a href="about.html">О клинике</a>
     <a href="procedures.html">Процедуры</a>
     <a href="results.html">Результаты</a>
+    <a href="reviews.html">Отзывы</a>
     <a href="video.html">Видео</a>
     <a href="price.html">Прайс</a>
     <a href="contacts.html">Контакты</a>
@@ -160,13 +162,61 @@
       </div>
 
       <div class="split__media">
-        <div class="map-slot" data-reveal="img">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
-          <p class="tiny">Карта появится здесь</p>
-          <p class="muted mw-42" style="text-align:center">Точный адрес пока не публикуем — подскажем в WhatsApp при подтверждении записи. Место под карту Google Maps / 2GIS уже подготовлено.</p>
+        <div class="map" data-reveal="img">
+          <svg class="map__canvas" viewBox="0 0 800 540" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Схематичная карта — Бишкек">
+            <rect width="800" height="540" fill="#EEE7DB"/>
+            <!-- парк -->
+            <rect x="96" y="70" width="150" height="118" rx="18" fill="#A5917C" opacity=".2"/>
+            <circle cx="642" cy="126" r="60" fill="#A5917C" opacity=".16"/>
+            <!-- кварталы -->
+            <g fill="#A5917C" opacity=".13">
+              <rect x="300" y="90" width="90" height="70" rx="6"/>
+              <rect x="430" y="198" width="120" height="80" rx="6"/>
+              <rect x="150" y="330" width="110" height="80" rx="6"/>
+              <rect x="560" y="360" width="120" height="90" rx="6"/>
+              <rect x="300" y="330" width="90" height="60" rx="6"/>
+            </g>
+            <!-- река -->
+            <path d="M-20 430 C 160 380 300 470 470 400 S 760 360 830 420" fill="none" stroke="#BFA98C" stroke-width="11" stroke-linecap="round" opacity=".7"/>
+            <!-- второстепенные улицы -->
+            <g stroke="#9C8A76" stroke-width="1.8" opacity=".5" fill="none">
+              <path d="M0 120 H800"/><path d="M0 200 H800"/><path d="M0 360 H800"/><path d="M0 460 H800"/>
+              <path d="M140 0 V540"/><path d="M260 0 V540"/><path d="M540 0 V540"/><path d="M660 0 V540"/>
+              <path d="M-40 40 L840 300"/><path d="M-40 320 L840 -20"/>
+            </g>
+            <!-- главные проспекты через центр -->
+            <g stroke="#6E6357" stroke-width="4" opacity=".55" fill="none">
+              <path d="M0 280 H800"/><path d="M400 0 V540"/>
+            </g>
+          </svg>
+          <span class="map__pulse" aria-hidden="true"></span>
+          <span class="map__pin" aria-hidden="true">
+            <svg viewBox="0 0 44 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 55.5C22 55.5 40.5 36.4 40.5 22A18.5 18.5 0 1 0 3.5 22c0 14.4 18.5 33.5 18.5 33.5z" fill="#141210" stroke="#DAC9B4" stroke-width="1.2"/>
+              <circle cx="22" cy="21.5" r="12.5" fill="#FBF9F5"/>
+              <text x="22" y="26.4" text-anchor="middle" font-family="Cormorant Garamond, Times New Roman, serif" font-size="15" letter-spacing="-1.4" fill="#141210">NB</text>
+            </svg>
+          </span>
+          <div class="map__badge">
+            <b>NURZHANA BEAUTY</b>
+            <span>Бишкек · аппаратная косметология</span>
+          </div>
+        </div>
+
+        <div class="btn-row" data-reveal data-d="80" style="margin-top:14px">
+          <a class="btn btn--ghost btn--sm" href="https://www.google.com/maps/search/?api=1&query=Бишкек" target="_blank" rel="noopener">
+            <svg class="btn__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <span>Открыть в Google Maps</span>
+          </a>
+          <a class="btn btn--ghost btn--sm" href="https://2gis.kg/bishkek" target="_blank" rel="noopener"><span>Открыть в 2ГИС</span></a>
         </div>
       </div>
     </div>
+
+    <p class="pending" data-reveal style="margin-top:clamp(28px,3.2vw,44px)">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor"><circle cx="7" cy="7" r="6"/><path d="M7 4v4M7 10h.01"/></svg>
+      <span>Метка на карте отмечает город Бишкек. Точную точку с адресом установим здесь, как только подтвердим его — а кнопки выше уже открывают Бишкек в Google Maps и 2ГИС. Адрес и ориентиры также подскажем в WhatsApp при записи.</span>
+    </p>
   </section>
 
   <section class="sec sec--milk" id="zapis">
@@ -280,6 +330,7 @@
           <li><a href="specialist.html">О специалисте</a></li>
           <li><a href="procedures.html">Процедуры</a></li>
           <li><a href="results.html">Результаты</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
           <li><a href="video.html">Видео</a></li>
           <li><a href="price.html">Прайс</a></li>
           <li><a href="contacts.html">Контакты</a></li>

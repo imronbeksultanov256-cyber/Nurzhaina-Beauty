@@ -98,15 +98,30 @@
     items.forEach(function (el) { io.observe(el); });
 
     /* страховка: контент никогда не должен остаться невидимым, даже если
-       IntersectionObserver не сработал (фоновая вкладка, нестандартный браузер) */
+       IntersectionObserver не сработал (фоновая вкладка, нестандартный браузер).
+       Реагируем и на скролл — так клип-анимация карты/фото гарантированно снимется. */
     var revealVisible = function () {
-      var vh = window.innerHeight;
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var pending = 0;
       items.forEach(function (el) {
         if (el.classList.contains('is-in')) return;
         var r = el.getBoundingClientRect();
-        if (r.top < vh && r.bottom > 0) el.classList.add('is-in');
+        if (r.top < vh + 40 && r.bottom > -40) { el.classList.add('is-in'); io.unobserve(el); }
+        else pending++;
       });
+      if (!pending) {
+        window.removeEventListener('scroll', onScrollReveal);
+        window.removeEventListener('resize', onScrollReveal);
+      }
     };
+    var scrollTick = false;
+    var onScrollReveal = function () {
+      if (scrollTick) return;
+      scrollTick = true;
+      window.requestAnimationFrame(function () { scrollTick = false; revealVisible(); });
+    };
+    window.addEventListener('scroll', onScrollReveal, { passive: true });
+    window.addEventListener('resize', onScrollReveal, { passive: true });
     window.setTimeout(revealVisible, 1200);
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible') window.setTimeout(revealVisible, 100);
@@ -189,13 +204,35 @@
     var idx = 0;
     var opener = null;
 
+    function stopVideo() {
+      var v = frame.querySelector('video');
+      if (v) { try { v.pause(); } catch (e) {} }
+    }
     function render(i) {
       var t = triggers[(i + triggers.length) % triggers.length];
       idx = triggers.indexOf(t);
-      var src = t.querySelector('.ratio');
+      stopVideo();
       frame.innerHTML = '';
-      if (src) frame.appendChild(src.cloneNode(true));
-      frame.classList.toggle('lb__frame--v', t.getAttribute('data-lb-ratio') === '9-16');
+      var vsrc = t.getAttribute('data-lb-video');
+      var vert = t.getAttribute('data-lb-ratio') === '9-16';
+      if (vsrc) {
+        var poster = t.getAttribute('data-lb-poster') || '';
+        var vid = document.createElement('video');
+        vid.src = vsrc;
+        if (poster) vid.poster = poster;
+        vid.controls = true;
+        vid.autoplay = true;
+        vid.playsInline = true;
+        vid.setAttribute('playsinline', '');
+        vid.style.cssText = 'width:100%;height:auto;max-height:' + (vert ? '80vh' : '78vh') + ';display:block;background:#000';
+        frame.appendChild(vid);
+        var p = vid.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        var src = t.querySelector('.ratio');
+        if (src) frame.appendChild(src.cloneNode(true));
+      }
+      frame.classList.toggle('lb__frame--v', vert);
       cap.textContent = t.getAttribute('data-lb-cap') || '';
     }
     function open(t) {
@@ -206,6 +243,7 @@
       $('.lb__x', lb).focus();
     }
     function close() {
+      stopVideo();
       lb.classList.remove('is-on');
       document.body.style.overflow = '';
       if (opener) opener.focus();
@@ -375,6 +413,62 @@
     $$('[data-cta-book]').forEach(function (a) { a.setAttribute('href', '#zapis'); });
   }
 
+  /* ---------------- reviews ---------------- */
+  function initReviews() {
+    var esc = function (s) {
+      return String(s).replace(/[&<>"]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+      });
+    };
+    var stars = '<span class="review__stars" aria-label="5 из 5">' +
+      '<svg width="72" height="13" viewBox="0 0 72 13" fill="currentColor" aria-hidden="true">' +
+      [0, 15, 30, 45, 60].map(function (x) {
+        return '<path transform="translate(' + x + ' 0)" d="M6 0l1.6 3.7L11.6 4 8.6 6.6 9.5 10.6 6 8.4 2.5 10.6 3.4 6.6 0.4 4 4.4 3.7z"/>';
+      }).join('') + '</svg></span>';
+
+    /* ссылка «смотреть другие отзывы» → подборка в Instagram */
+    var igUrl = NB.CONTACTS && NB.CONTACTS.instagramReviews;
+    if (igUrl) {
+      $$('[data-ig-reviews]').forEach(function (a) {
+        a.setAttribute('href', igUrl);
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener');
+      });
+    }
+
+    /* текстовые отзывы */
+    var box = $('[data-reviews]');
+    if (box && NB.REVIEWS) {
+      var limit = parseInt(box.getAttribute('data-limit'), 10) || NB.REVIEWS.length;
+      box.innerHTML = NB.REVIEWS.slice(0, limit).map(function (r, i) {
+        return '' +
+          '<figure class="review" data-reveal data-d="' + (i % 3) * 90 + '">' +
+          stars +
+          '<blockquote class="review__text">' + esc(r.text) + '</blockquote>' +
+          '<figcaption class="review__by">' +
+          '<span class="review__author">' + esc(r.author) + '</span>' +
+          (r.tag ? '<span class="review__tag">' + esc(r.tag) + '</span>' : '') +
+          '</figcaption></figure>';
+      }).join('');
+    }
+
+    /* видео-отзывы */
+    var vbox = $('[data-video-reviews]');
+    if (vbox && NB.VIDEO_REVIEWS) {
+      vbox.innerHTML = NB.VIDEO_REVIEWS.map(function (v, i) {
+        return '' +
+          '<button class="reel" type="button" data-reveal data-d="' + i * 90 + '"' +
+          ' data-lb data-lb-ratio="9-16" data-lb-video="' + esc(v.src) + '"' +
+          ' data-lb-poster="' + esc(v.poster) + '"' +
+          ' data-lb-cap="' + esc(v.title + ' · ' + v.note) + '">' +
+          '<div class="ratio r-9-16"><img src="' + esc(v.poster) + '" alt="' + esc(v.title) + '" loading="lazy" decoding="async"></div>' +
+          '<span class="play" aria-hidden="true"><svg width="16" height="18" viewBox="0 0 16 18" fill="currentColor"><path d="M0 0l16 9-16 9z"/></svg></span>' +
+          '<span class="reel__cap"><b>' + esc(v.title) + '</b><span>' + esc(v.note) + '</span></span>' +
+          '</button>';
+      }).join('');
+    }
+  }
+
   /* ---------------- misc ---------------- */
   function initYear() {
     $$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
@@ -396,6 +490,7 @@
     initHeader();
     initDrawer();
     initProcedurePage();
+    initReviews();
     initReveal();
     initParallax();
     initAcc();
