@@ -161,120 +161,22 @@
         </div>
       </div>
 
-      <div class="split__media">
-        <div class="map" data-reveal="img">
-          <svg class="map__canvas" viewBox="0 0 800 540" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Схематичная карта — Бишкек">
-            <rect width="800" height="540" fill="#EEE7DB"/>
-            <!-- парк -->
-            <rect x="96" y="70" width="150" height="118" rx="18" fill="#A5917C" opacity=".2"/>
-            <circle cx="642" cy="126" r="60" fill="#A5917C" opacity=".16"/>
-            <!-- кварталы -->
-            <g fill="#A5917C" opacity=".13">
-              <rect x="300" y="90" width="90" height="70" rx="6"/>
-              <rect x="430" y="198" width="120" height="80" rx="6"/>
-              <rect x="150" y="330" width="110" height="80" rx="6"/>
-              <rect x="560" y="360" width="120" height="90" rx="6"/>
-              <rect x="300" y="330" width="90" height="60" rx="6"/>
-            </g>
-            <!-- река -->
-            <path d="M-20 430 C 160 380 300 470 470 400 S 760 360 830 420" fill="none" stroke="#BFA98C" stroke-width="11" stroke-linecap="round" opacity=".7"/>
-            <!-- второстепенные улицы -->
-            <g stroke="#9C8A76" stroke-width="1.8" opacity=".5" fill="none">
-              <path d="M0 120 H800"/><path d="M0 200 H800"/><path d="M0 360 H800"/><path d="M0 460 H800"/>
-              <path d="M140 0 V540"/><path d="M260 0 V540"/><path d="M540 0 V540"/><path d="M660 0 V540"/>
-              <path d="M-40 40 L840 300"/><path d="M-40 320 L840 -20"/>
-            </g>
-            <!-- главные проспекты через центр -->
-            <g stroke="#6E6357" stroke-width="4" opacity=".55" fill="none">
-              <path d="M0 280 H800"/><path d="M400 0 V540"/>
-            </g>
-          </svg>
-          <span class="map__pulse" aria-hidden="true"></span>
-          <span class="map__pin" aria-hidden="true">
-            <svg viewBox="0 0 44 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22 55.5C22 55.5 40.5 36.4 40.5 22A18.5 18.5 0 1 0 3.5 22c0 14.4 18.5 33.5 18.5 33.5z" fill="#141210" stroke="#DAC9B4" stroke-width="1.2"/>
-              <circle cx="22" cy="21.5" r="12.5" fill="#FBF9F5"/>
-              <text x="22" y="26.4" text-anchor="middle" font-family="Cormorant Garamond, Times New Roman, serif" font-size="15" letter-spacing="-1.4" fill="#141210">NB</text>
-            </svg>
-          </span>
-          <div class="map__badge">
-            <b>NURZHANA BEAUTY</b>
-            <span>Бишкек · аппаратная косметология</span>
-          </div>
-        </div>
-
-        <div class="btn-row" data-reveal data-d="80" style="margin-top:14px">
-          <a class="btn btn--ghost btn--sm" href="https://www.google.com/maps/search/?api=1&query=Бишкек" target="_blank" rel="noopener">
-            <svg class="btn__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
-            <span>Открыть в Google Maps</span>
-          </a>
-          <a class="btn btn--ghost btn--sm" href="https://2gis.kg/bishkek" target="_blank" rel="noopener"><span>Открыть в 2ГИС</span></a>
-        </div>
       </div>
     </div>
-
-    <p class="pending" data-reveal style="margin-top:clamp(28px,3.2vw,44px)">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor"><circle cx="7" cy="7" r="6"/><path d="M7 4v4M7 10h.01"/></svg>
-      <span>Метка на карте отмечает город Бишкек. Точную точку с адресом установим здесь, как только подтвердим его — а кнопки выше уже открывают Бишкек в Google Maps и 2ГИС. Адрес и ориентиры также подскажем в WhatsApp при записи.</span>
-    </p>
   </section>
 
+  <!-- ЗАПИСЬ: WhatsApp / Instagram -->
   <section class="sec sec--milk" id="zapis">
-    <div class="wrap">
-      <div class="split">
-        <div class="split__copy">
-          <p class="eyebrow" data-reveal="fade">Запись</p>
-          <h2 class="h2" data-reveal data-d="60" style="margin-top:18px">Записаться<br>на консультацию</h2>
-          <p class="body mw-42" data-reveal data-d="120">Оставьте контакты — мы свяжемся и подберём удобное время. Форма короткая, всё остальное обсудим лично.</p>
-          <div data-reveal data-d="180" style="padding-top:10px">
-            <p class="tiny" style="margin-bottom:12px">Или напишите нам в WhatsApp</p>
-            <a class="link-arrow" href="#" data-wa="default">
-              <span>+996 707 358 008</span>
-              <svg width="20" height="8" viewBox="0 0 20 8" fill="none" stroke="currentColor"><path d="M15 1l4 3-4 3M0 4h19"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div data-reveal data-d="120">
-          <form class="form" novalidate>
-            <div class="field">
-              <label for="c-name">Имя</label>
-              <input id="c-name" name="name" type="text" autocomplete="name" placeholder="Ваше имя" required>
-            </div>
-            <div class="field">
-              <label for="c-phone">Телефон</label>
-              <input id="c-phone" name="phone" type="tel" autocomplete="tel" placeholder="+996 ___ ___ ___" required>
-            </div>
-            <div class="field field--full">
-              <label for="c-proc">Желаемая процедура</label>
-              <select id="c-proc" name="procedure">
-                <option value="">Не знаю — нужна консультация</option>
-                <option value="Омоложение">Омоложение</option>
-                <option value="Лифтинг">Лифтинг</option>
-                <option value="Улучшение качества кожи">Улучшение качества кожи</option>
-                <option value="Коррекция овала лица">Коррекция овала лица</option>
-                <option value="Уход за кожей">Уход за кожей</option>
-                <option value="Аппаратные процедуры">Аппаратные процедуры</option>
-              </select>
-            </div>
-            <div class="field field--full">
-              <label for="c-time">Удобное время</label>
-              <input id="c-time" name="time" type="text" placeholder="Например: будни после 17:00">
-            </div>
-            <div class="field field--full">
-              <label for="c-note">Комментарий</label>
-              <textarea id="c-note" name="note" rows="3" placeholder="Что вас интересует?"></textarea>
-            </div>
-            <div class="form__foot">
-              <button class="btn" type="submit"><span>Отправить заявку</span></button>
-              <span class="muted">Нажимая кнопку, вы соглашаетесь с <a href="privacy.html" style="border-bottom:1px solid var(--line)">политикой конфиденциальности</a>.</span>
-            </div>
-            <div class="form__ok" role="status">
-              <p class="h3">Спасибо!</p>
-              <p class="body">Мы получили вашу заявку и свяжемся с вами в ближайшее время.</p>
-            </div>
-          </form>
-        </div>
+    <div class="wrap wrap--narrow center">
+      <p class="eyebrow" data-reveal="fade">Запись</p>
+      <h2 class="h2" data-reveal data-d="60" style="margin-top:18px;max-width:18ch;margin-inline:auto">Запишитесь удобным способом</h2>
+      <p class="lead mw-50" data-reveal data-d="120" style="margin:22px auto 0">Напишите нам в WhatsApp или Instagram — ответим и подберём удобное время. Это быстрее любой формы.</p>
+      <div class="btn-row" data-reveal data-d="180" style="justify-content:center;margin-top:clamp(28px,3.2vw,42px)">
+        <a class="btn" href="#" data-wa="default" data-wa-ico><span>Написать в WhatsApp</span></a>
+        <a class="btn btn--ghost" href="https://www.instagram.com/nurzhaina_beauty/" target="_blank" rel="noopener">
+          <svg class="btn__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+          <span>Написать в Instagram</span>
+        </a>
       </div>
     </div>
   </section>
@@ -351,7 +253,7 @@
 
     <div class="footer-bot">
       <span>© <span data-year>2026</span> NURZHANA BEAUTY. Бишкек.</span>
-      <a href="privacy.html">Политика конфиденциальности</a>
+      <span>Аппаратная косметология · Омоложение без операций</span>
     </div>
   </div>
 </footer>

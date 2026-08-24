@@ -385,7 +385,7 @@
       rel.innerHTML = others.map(function (o, i) {
         return '' +
           '<article class="card" data-reveal data-d="' + i * 90 + '">' +
-          '<div class="card__media"><div class="ratio r-4-5"><div class="ph ' + (o.ph || '') + '"><span class="ph__label">Фото</span></div></div></div>' +
+          '<div class="card__media"><div class="ratio r-4-5"><div class="ph ' + (o.ph || '') + '"></div></div></div>' +
           '<h3 class="card__t">' + esc(o.title) + '</h3>' +
           '<p class="card__d">' + esc(o.short) + '</p>' +
           '<div class="card__f"><span>Подробнее</span>' +
@@ -407,66 +407,110 @@
     });
   }
 
-  /* если на текущей странице есть форма записи — CTA ведёт к ней, а не на другую страницу */
+  /* запись идёт напрямую в WhatsApp — все кнопки «Записаться» открывают чат */
   function initCtaAnchor() {
-    if (!document.getElementById('zapis')) return;
-    $$('[data-cta-book]').forEach(function (a) { a.setAttribute('href', '#zapis'); });
+    if (!NB.wa) return;
+    var href = NB.wa(NB.WA_TEXT && NB.WA_TEXT.default);
+    $$('[data-cta-book]').forEach(function (a) {
+      a.setAttribute('href', href);
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    });
   }
 
-  /* ---------------- reviews ---------------- */
-  function initReviews() {
-    var esc = function (s) {
-      return String(s).replace(/[&<>"]/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
-      });
-    };
-    var stars = '<span class="review__stars" aria-label="5 из 5">' +
-      '<svg width="72" height="13" viewBox="0 0 72 13" fill="currentColor" aria-hidden="true">' +
-      [0, 15, 30, 45, 60].map(function (x) {
-        return '<path transform="translate(' + x + ' 0)" d="M6 0l1.6 3.7L11.6 4 8.6 6.6 9.5 10.6 6 8.4 2.5 10.6 3.4 6.6 0.4 4 4.4 3.7z"/>';
-      }).join('') + '</svg></span>';
+  /* ---------------- reviews (слайд-шоу фото + видео) ---------------- */
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
 
-    /* ссылка «смотреть другие отзывы» → подборка в Instagram */
-    var igUrl = NB.CONTACTS && NB.CONTACTS.instagramReviews;
-    if (igUrl) {
-      $$('[data-ig-reviews]').forEach(function (a) {
-        a.setAttribute('href', igUrl);
+  function initReviews() {
+    /* ссылки «смотреть отзывы/результаты» → Instagram */
+    var C = NB.CONTACTS || {};
+    var wire = function (sel, url) {
+      if (!url) return;
+      $$(sel).forEach(function (a) {
+        a.setAttribute('href', url);
         a.setAttribute('target', '_blank');
         a.setAttribute('rel', 'noopener');
       });
-    }
+    };
+    wire('[data-ig-reviews]', C.instagramReviews);
+    wire('[data-ig-results]', C.instagramResults || C.instagram);
 
-    /* текстовые отзывы */
-    var box = $('[data-reviews]');
-    if (box && NB.REVIEWS) {
-      var limit = parseInt(box.getAttribute('data-limit'), 10) || NB.REVIEWS.length;
-      box.innerHTML = NB.REVIEWS.slice(0, limit).map(function (r, i) {
-        return '' +
-          '<figure class="review" data-reveal data-d="' + (i % 3) * 90 + '">' +
-          stars +
-          '<blockquote class="review__text">' + esc(r.text) + '</blockquote>' +
-          '<figcaption class="review__by">' +
-          '<span class="review__author">' + esc(r.author) + '</span>' +
-          (r.tag ? '<span class="review__tag">' + esc(r.tag) + '</span>' : '') +
-          '</figcaption></figure>';
-      }).join('');
-    }
-
-    /* видео-отзывы */
-    var vbox = $('[data-video-reviews]');
-    if (vbox && NB.VIDEO_REVIEWS) {
-      vbox.innerHTML = NB.VIDEO_REVIEWS.map(function (v, i) {
-        return '' +
-          '<button class="reel" type="button" data-reveal data-d="' + i * 90 + '"' +
-          ' data-lb data-lb-ratio="9-16" data-lb-video="' + esc(v.src) + '"' +
-          ' data-lb-poster="' + esc(v.poster) + '"' +
-          ' data-lb-cap="' + esc(v.title + ' · ' + v.note) + '">' +
-          '<div class="ratio r-9-16"><img src="' + esc(v.poster) + '" alt="' + esc(v.title) + '" loading="lazy" decoding="async"></div>' +
+    /* слайдер отзывов: фото-скриншоты + видео-отзывы в одной ленте */
+    $$('[data-reviews-slider]').forEach(function (track) {
+      var limit = parseInt(track.getAttribute('data-limit'), 10) || 0;
+      var slides = [];
+      (NB.REVIEW_PHOTOS || []).forEach(function (r) {
+        slides.push(
+          '<button class="rev-slide" type="button" data-lb data-lb-cap="' + esc(r.cap) + '" aria-label="' + esc(r.cap) + '">' +
+          '<div class="ratio r-3-4"><img src="' + esc(r.src) + '" alt="' + esc(r.cap) + '" loading="lazy" decoding="async"></div>' +
+          '</button>'
+        );
+      });
+      (NB.VIDEO_REVIEWS || []).forEach(function (v) {
+        slides.push(
+          '<button class="rev-slide rev-slide--video" type="button" data-lb data-lb-ratio="9-16"' +
+          ' data-lb-video="' + esc(v.src) + '" data-lb-poster="' + esc(v.poster) + '"' +
+          ' data-lb-cap="' + esc(v.title + ' · ' + v.note) + '" aria-label="' + esc(v.title) + '">' +
+          '<div class="ratio r-3-4"><img src="' + esc(v.poster) + '" alt="' + esc(v.title) + '" loading="lazy" decoding="async"></div>' +
           '<span class="play" aria-hidden="true"><svg width="16" height="18" viewBox="0 0 16 18" fill="currentColor"><path d="M0 0l16 9-16 9z"/></svg></span>' +
-          '<span class="reel__cap"><b>' + esc(v.title) + '</b><span>' + esc(v.note) + '</span></span>' +
-          '</button>';
-      }).join('');
-    }
+          '<span class="rev-slide__cap">' + esc(v.title) + ' · видео</span>' +
+          '</button>'
+        );
+      });
+      if (limit) slides = slides.slice(0, limit);
+      track.innerHTML = slides.join('');
+    });
+  }
+
+  /* карусель: стрелки, точки, свайп (нативный scroll-snap) */
+  function initSliders() {
+    $$('.rev-carousel').forEach(function (car) {
+      var track = $('.rev-carousel__track', car);
+      if (!track) return;
+      var prev = $('.rev-carousel__nav--p', car);
+      var next = $('.rev-carousel__nav--n', car);
+      var dotsBox = $('.rev-carousel__dots', car);
+      var slides = function () { return $$('.rev-slide', track); };
+
+      var step = function () {
+        var s = slides()[0];
+        if (!s) return track.clientWidth;
+        var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+        return s.getBoundingClientRect().width + gap;
+      };
+      var count = slides().length;
+      if (dotsBox && count) {
+        dotsBox.innerHTML = slides().map(function (_, i) {
+          return '<button class="rev-carousel__dot" type="button" aria-label="Слайд ' + (i + 1) + '"></button>';
+        }).join('');
+      }
+      var dots = dotsBox ? $$('.rev-carousel__dot', dotsBox) : [];
+
+      var current = function () { return Math.round(track.scrollLeft / step()); };
+      var goTo = function (i) {
+        i = Math.max(0, Math.min(count - 1, i));
+        track.scrollTo({ left: i * step(), behavior: reduced ? 'auto' : 'smooth' });
+      };
+      var update = function () {
+        var i = current();
+        dots.forEach(function (d, di) { d.setAttribute('aria-current', String(di === i)); });
+        if (prev) prev.disabled = i <= 0;
+        if (next) next.disabled = i >= count - 1;
+      };
+      if (prev) prev.addEventListener('click', function () { goTo(current() - 1); });
+      if (next) next.addEventListener('click', function () { goTo(current() + 1); });
+      dots.forEach(function (d, i) { d.addEventListener('click', function () { goTo(i); }); });
+      var t = false;
+      track.addEventListener('scroll', function () {
+        if (t) return; t = true;
+        window.requestAnimationFrame(function () { t = false; update(); });
+      }, { passive: true });
+      update();
+    });
   }
 
   /* ---------------- misc ---------------- */
@@ -491,6 +535,7 @@
     initDrawer();
     initProcedurePage();
     initReviews();
+    initSliders();
     initReveal();
     initParallax();
     initAcc();

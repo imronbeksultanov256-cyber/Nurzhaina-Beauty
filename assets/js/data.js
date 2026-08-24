@@ -14,6 +14,9 @@ window.NB = (function () {
     instagramHandle: '@nurzhaina_beauty',
     // Подборка «Отзывы» в Instagram Stories Highlights
     instagramReviews: 'https://www.instagram.com/stories/highlights/17963641731058239/',
+    // Раздел «Результаты» в Instagram — вставьте ссылку, когда будет готова.
+    // Пока пусто — кнопка ведёт в профиль Instagram.
+    instagramResults: '',
     // Адрес пока не предоставлен текстом — на карте показан город.
     // Когда появится точка: впишите координаты, и карта встанет на неё.
     address: null,
@@ -255,6 +258,15 @@ window.NB = (function () {
      Видео-отзывы лежат в assets/video/reviews/.
      Все дополнительные отзывы — в подборке Instagram (CONTACTS.instagramReviews).
   ---------------------------- */
+  /* Скриншоты отзывов для слайд-шоу (реальные сообщения клиентов). */
+  const REVIEW_PHOTOS = [
+    { src: 'assets/img/reviews/review-1.jpg', cap: 'Отзыв клиентки · RF-лифтинг' },
+    { src: 'assets/img/reviews/review-2.jpg', cap: 'Отзыв клиентки · RF и биоревитализация' },
+    { src: 'assets/img/reviews/review-3.jpg', cap: 'Отзыв клиентки · RF-лифтинг' },
+    { src: 'assets/img/reviews/review-4.jpg', cap: 'Отзыв клиентки · омоложение' },
+    { src: 'assets/img/reviews/review-5.jpg', cap: 'Отзыв · Instagram' }
+  ];
+
   const REVIEWS = [
     {
       text: 'Я приходила к вам на RF-лифтинг, мне очень понравилось — я побывала не просто у косметолога, но и у психолога! Вы прекрасный человек с красивой душой и большим сердцем. Вышла от вас с такой лёгкостью на душе! Обязательно теперь только к вам буду ходить: понравилось, что вы не как все косметологи — не навязываете лишние процедуры и косметику. Спасибо большое за вашу работу.',
@@ -305,5 +317,5 @@ window.NB = (function () {
   ---------------------------- */
   const FORM_ENDPOINT = '';
 
-  return { CONTACTS, WA_TEXT, wa, FACTS, PROCEDURES, FLOW, WHY, PRICE, RESULTS, VIDEOS, REVIEWS, VIDEO_REVIEWS, FAQ, FORM_ENDPOINT };
+  return { CONTACTS, WA_TEXT, wa, FACTS, PROCEDURES, FLOW, WHY, PRICE, RESULTS, VIDEOS, REVIEWS, REVIEW_PHOTOS, VIDEO_REVIEWS, FAQ, FORM_ENDPOINT };
 })();
